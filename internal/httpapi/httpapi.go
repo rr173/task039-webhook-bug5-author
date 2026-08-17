@@ -66,6 +66,10 @@ func (a *API) setDownstream(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, map[string]any{"error": "请求体不是合法 JSON", "status": http.StatusBadRequest})
 		return
 	}
+	if err := dec.Decode(&struct{}{}); err != io.EOF {
+		writeJSON(w, http.StatusBadRequest, map[string]any{"error": "请求体不是合法 JSON", "status": http.StatusBadRequest})
+		return
+	}
 	if req.URL == "" {
 		writeJSON(w, http.StatusBadRequest, map[string]any{"error": "下游地址不能为空", "status": http.StatusBadRequest})
 		return
